@@ -1,4 +1,4 @@
-public class PersonRepo
+public class PersonRepo //change to SERVICE
 {
     PersonStorage personStorage = new();
 
@@ -25,6 +25,12 @@ public class PersonRepo
     public Person? GetPerson(int? personId)
     {
         var existingPerson = personStorage.GetPerson(personId);
+        return existingPerson;
+    }
+
+    public Person? GetUser(string userId)
+    {
+        var existingPerson = personStorage.GetUser(userId);
         return existingPerson;
     }
 }

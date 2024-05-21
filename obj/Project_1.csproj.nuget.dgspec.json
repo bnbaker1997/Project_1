@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\U1H402\\Documents\\RevatureTraining\\Project_1-1\\Project_1.csproj": {}
+    "c:\\Users\\U1H402\\Documents\\RevatureTraining\\Project_1\\Project_1.csproj": {}
   },
   "projects": {
-    "c:\\Users\\U1H402\\Documents\\RevatureTraining\\Project_1-1\\Project_1.csproj": {
+    "c:\\Users\\U1H402\\Documents\\RevatureTraining\\Project_1\\Project_1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\U1H402\\Documents\\RevatureTraining\\Project_1-1\\Project_1.csproj",
+        "projectUniqueName": "c:\\Users\\U1H402\\Documents\\RevatureTraining\\Project_1\\Project_1.csproj",
         "projectName": "Project_1",
-        "projectPath": "c:\\Users\\U1H402\\Documents\\RevatureTraining\\Project_1-1\\Project_1.csproj",
+        "projectPath": "c:\\Users\\U1H402\\Documents\\RevatureTraining\\Project_1\\Project_1.csproj",
         "packagesPath": "C:\\Users\\U1H402\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\U1H402\\Documents\\RevatureTraining\\Project_1-1\\obj\\",
+        "outputPath": "c:\\Users\\U1H402\\Documents\\RevatureTraining\\Project_1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\U1H402\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -76,7 +76,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
