@@ -63,7 +63,7 @@ namespace Geico.Moat.App.Fnd.Data.ADO
         /// <param name="reader">the data reader returned from SQL Server.</param>
         /// <param name="colName">The name of the column to read.</param>
         /// <returns>The data as a String.</returns>
-        public static string GetString(this IDataReader reader, string colName)
+        public static string? GetString(this IDataReader reader, string colName)
         {
             try
             {
@@ -196,7 +196,7 @@ namespace Geico.Moat.App.Fnd.Data.ADO
         /// <param name="reader">the data reader returned from SQL Server.</param>
         /// <param name="colName">The name of the column to read.</param>
         /// <returns>The data as a Byte array.</returns>
-        public static byte[] GetBytes(this IDataReader reader, string colName)
+        public static byte[]? GetBytes(this IDataReader reader, string colName)
         {
             try
             {
