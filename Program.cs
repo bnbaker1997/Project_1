@@ -4,23 +4,41 @@ using System.Transactions;
 public class Program
 {
     static LotRepo lotRepo = new();
+    static PersonStorage personStorage = new(); //changing to personRepo
 
     public static void Main(string[] args)
-    {
-        MainMenu();
+    {//   **get this from Movie USER code to set up a shared connection
+     // string path = @"C:\Users\U1H402\Documents\RevatureTraining\Project_1-1\project_1.txt";
+     // string connectionString = File.ReadAllText(path);
+     // System.Console.WriteLine(connectionString);  //remove later
+     LoginMenu();
+     MainMenu();
+
     }
 
     //TODO: Add a menu for the user to log in and access the main menu
     public static void LoginMenu()
     {
-        Console.WriteLine("Enter your username: ");
-        string username = Console.ReadLine();
-        Console.WriteLine("Enter your password: ");
-        string password = Console.ReadLine();
+        System.Console.WriteLine("__Building Lot Management System__");
+        Console.WriteLine("Please enter your User Id: ");
+        string userId = Console.ReadLine();
+        Person thisPerson = personStorage.GetUser(userId);
+        if (thisPerson != null)
+            Console.WriteLine("Enter your password: ");
+            string password = Console.ReadLine();
+            //if input password matches the password in the database
+
+            if (thisPerson.Password == password)
+            {
+                Console.WriteLine("Welcome " + thisPerson.FirstName + " " + thisPerson.LastName);
+                MainMenu();
+            }
+            else
+            {
+                Console.WriteLine("Incorrect password. Please try again.");
+            }
     }
-    //TODO: Add a menu for the user to access the People data
-    //TODO: Add a menu for the user to access the Sales data
-    public static void MainMenu()
+       public static void MainMenu()
     {
         Console.WriteLine("1 - Get Lot");
         Console.WriteLine("2 - Get All Lots");
@@ -132,11 +150,11 @@ public class Program
     public static void UpdateLot()
     {
         Lot? retrievedLot = PromptForLot();
-      
+
         if (retrievedLot == null) return;
         // var updatedLot = lotRepo.UpdateLot(retrievedLot);
         if (retrievedLot != null)
-        {   
+        {
             System.Console.WriteLine("Lot found: " + retrievedLot);
             Console.WriteLine("Enter new information for the lot");
             System.Console.WriteLine("OR Press Enter to keep the existing value");
@@ -164,8 +182,8 @@ public class Program
     {
         Lot? retrievedLot = PromptForLot();
         if (retrievedLot == null) return;
-        
-   
+
+
         if (retrievedLot != null)
         {
             System.Console.WriteLine("Lot found: " + retrievedLot);
@@ -193,5 +211,23 @@ public class Program
         }
         return retrievedLot;
     }
+
+    public static void AddPerson()
+    {
+        //TODO add this
+    }
+    public static void UpdatePerson()
+    {
+        //TODO add this
+    }
+    public static void GetPerson()
+    {
+        //TODO add this
+    }
+    // public static void DeletePerson()
+    // {
+    //     //TODO add this
+    // }
+
 }
 
