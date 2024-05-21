@@ -3,8 +3,8 @@ using System.Transactions;
 
 public class Program
 {
-    static LotRepo lotRepo = new();
-    static PersonStorage personStorage = new(); //changing to personRepo
+    static LotService lotService = new(); //changed from lotRepo to lotService
+    static PersonRepo personRepo = new(); //changed from personStorage to personRepo
 
     public static void Main(string[] args)
     {//   **get this from Movie USER code to set up a shared connection
@@ -22,7 +22,7 @@ public class Program
         System.Console.WriteLine("__Building Lot Management System__");
         Console.WriteLine("Please enter your User Id: ");
         string userId = Console.ReadLine();
-        Person thisPerson = personStorage.GetUser(userId);
+        Person thisPerson = personRepo.GetUser(userId);
         if (thisPerson != null)
             Console.WriteLine("Enter your password: ");
             string password = Console.ReadLine();
@@ -86,7 +86,7 @@ public class Program
     {
         Console.WriteLine("Enter Lot Number: ");
         int lotId = int.Parse(Console.ReadLine() ?? "0");
-        Lot lot = lotRepo.GetLot(lotId);
+        Lot lot = lotService.GetLot(lotId);
         if (lot != null)
         {
             Console.WriteLine(lot);
@@ -95,7 +95,7 @@ public class Program
 
     public static void RetrieveAllLots()
     {
-        List<Lot> allLots = lotRepo.GetAllLots();
+        List<Lot> allLots = lotService.GetAllLots();
         foreach (Lot lot in allLots)
         {
             Console.WriteLine(lot);
@@ -104,7 +104,7 @@ public class Program
 
     public static void GetAvailableLots()
     {
-        List<Lot> availableLots = lotRepo.GetAvailableLots();
+        List<Lot> availableLots = lotService.GetAvailableLots();
         foreach (Lot lot in availableLots)
         {
             Console.WriteLine(lot);
@@ -113,7 +113,7 @@ public class Program
 
     public static void GetSoldLots()
     {
-        List<Lot> soldLots = lotRepo.GetSoldLots();
+        List<Lot> soldLots = lotService.GetSoldLots();
         foreach (Lot lot in soldLots)
         {
             Console.WriteLine(lot);
@@ -142,7 +142,7 @@ public class Program
         lot.LotSizeAcres = lotSizeAcres;
         lot.IsAvailable = isAvailable;
 
-        lotRepo.AddLot(lot);
+        lotService.AddLot(lot);
 
 
     }
@@ -152,7 +152,7 @@ public class Program
         Lot? retrievedLot = PromptForLot();
 
         if (retrievedLot == null) return;
-        // var updatedLot = lotRepo.UpdateLot(retrievedLot);
+        // var updatedLot = lotService.UpdateLot(retrievedLot);
         if (retrievedLot != null)
         {
             System.Console.WriteLine("Lot found: " + retrievedLot);
@@ -175,7 +175,7 @@ public class Program
             retrievedLot.LotSizeAcres = lotSizeAcres;
             retrievedLot.IsAvailable = isAvailable;
         }
-        lotRepo.UpdateLot(retrievedLot);
+        lotService.UpdateLot(retrievedLot);
     }
 
     public static void DeleteLot()
@@ -191,7 +191,7 @@ public class Program
             string input = Console.ReadLine() ?? string.Empty;
             if (input.ToLower() == "yes")
             {
-                lotRepo.RemoveLot(retrievedLot);
+                lotService.RemoveLot(retrievedLot);
             }
         }
     }
@@ -207,7 +207,7 @@ public class Program
             {
                 break;
             }
-            retrievedLot = lotRepo.GetLot(input);
+            retrievedLot = lotService.GetLot(input);
         }
         return retrievedLot;
     }
