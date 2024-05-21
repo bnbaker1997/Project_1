@@ -1,9 +1,9 @@
-class SaleStorage
+class SaleRepo  //changed name from SalesStorage to SalesRepo
 {
     public Dictionary<int, Sale> Sales;
     public int nextSaleId = 1;
 
-    public SaleStorage()
+    public SaleRepo()
     {
         Sales = [];
 
