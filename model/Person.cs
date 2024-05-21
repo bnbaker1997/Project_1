@@ -1,3 +1,4 @@
+
 public class Person
 {
     public int? PersonId { get; set; }  //add ID generator
@@ -48,6 +49,11 @@ public class Person
     public override string ToString()
     {
         return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+    }
+
+    internal void Add(Person newPerson)
+    {
+        throw new NotImplementedException();
     }
 }
 

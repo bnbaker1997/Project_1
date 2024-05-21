@@ -46,12 +46,12 @@ class LotRepo
 
         if (didRemove)
         {
-            return l;
+            return true;
         }
         else
         {
             System.Console.WriteLine("Not found - enter a valid Lot Number");
-            return null;
+            return false;
         }
     }
 }
