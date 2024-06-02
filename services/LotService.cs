@@ -1,22 +1,23 @@
-class LotService //change repo to SERVICE
+public class LotService //changed repo to SERVICE
 {
     LotRepo lotRepo = new();
 
-    public void AddLot(Lot lot)
+    public Lot? AddLot(Lot lot)
     {
-        lotRepo.AddLot(lot);
+        var newLot = lotRepo.AddLot(lot);
+        return newLot;
     }
 
-    public bool UpdateLot(Lot retrievedLot)
+// TODO: change to return the Lot object (retrievedLot) instead of a boolean (true/false)
+    public bool UpdateLot(Lot retrievedLot, int lotId)
     {
         if (retrievedLot != null)
         {
-            lotRepo.UpdateLot(retrievedLot);
+            lotRepo.UpdateLot(retrievedLot, lotId);
             return true;
         }
         return false;
     }
-
 
     public Lot? GetLot(int? lotId)
     {
@@ -31,7 +32,6 @@ class LotService //change repo to SERVICE
     public List<Lot> GetSoldLots()
     {
         return lotRepo.GetSoldLots();
-
     }
 
     public List<Lot> GetAllLots()
@@ -50,7 +50,6 @@ class LotService //change repo to SERVICE
         }
         else
         {
-            System.Console.WriteLine("Not found - enter a valid Lot Number");
             return false;
         }
     }

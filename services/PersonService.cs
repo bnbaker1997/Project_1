@@ -1,15 +1,32 @@
-public class PersonService //changed from REPO to SERVICE
+public class PersonService
 {
     PersonRepo personRepo = new();
 
-    public void AddPerson(Person person)
+    public static bool AddPerson(Person newPerson)
     {
-        PersonRepo.AddPerson(person);
+        return PersonRepo.AddPerson(newPerson);
     }
-
-    public bool UpdatePerson(Person updatePerson)
+    public Person? GetPerson(int personId)
     {
-        var existingPerson = personRepo.GetPerson(updatePerson.PersonId);
+        var retrievedPerson = personRepo.GetPerson(personId);
+        return retrievedPerson;
+    }
+    public List<Person> GetInterestedCustomers()
+    {
+        return personRepo.GetInterestedCustomers();
+    }
+    public List<Person> GetAllCustomers()
+    {
+        return personRepo.GetAllCustomers();
+    }
+    public Person? GetUser(string userId)
+    {
+        var currentUser = personRepo.GetUser(userId);
+        return currentUser;
+    }
+    public bool UpdatePerson(Person updatePerson, int PersonId)
+    {
+        var existingPerson = personRepo.GetPerson(PersonId);
         if (existingPerson != null)
         {
             bool updateSuccessful = personRepo.UpdatePerson(updatePerson); // Call the method on the instance of PersonStorage
@@ -21,16 +38,17 @@ public class PersonService //changed from REPO to SERVICE
             return false;
         }
     }
+    // public bool RemovePerson(Person retrievedPerson)
+    // {
+    //     bool didRemove = personRepo.RemovePerson(retrievedPerson.PersonId);
 
-    public Person? GetPerson(int? personId)
-    {
-        var existingPerson = personRepo.GetPerson(personId);
-        return existingPerson;
-    }
-
-    public Person? GetUser(string userId)
-    {
-        var existingPerson = personRepo.GetUser(userId);
-        return existingPerson;
-    }
+    //     if (didRemove)
+    //     {
+    //         return true;
+    //     }
+    //     else
+    //     {
+    //         return false;
+    //     }
+    // }
 }

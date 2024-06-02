@@ -2,18 +2,8 @@ using System.Data.SqlClient;
 using Geico.Moat.App.Fnd.Data.ADO;
 public class PersonRepo //changed from PersonStorage to REPO
 {
-    //   **get this from Movie USER code to set up a shared connection
-    //   private readonly string _connectionString;  
-    //     public PersonRepo(string connString)
-    //     {
-    //         _connectionString = connString;
-    //     }
-
-    // public Dictionary<int, Person> person;
-    // public int nextPersonId = 1;
-    public static void AddPerson(Person person)
+    public static bool AddPerson(Person person)
     {
-        // *this line can be removed with the shared connection
         var connectionString = "data source=GEIPW0785V4;initial catalog=Project_1;user id=sa;password=password"; // connection string to SQL Server
 
         using SqlConnection sqlConnection = new SqlConnection(connectionString);  // using statement to ensure resources are released after query is done
@@ -33,14 +23,14 @@ public class PersonRepo //changed from PersonStorage to REPO
         command.Parameters.AddWithValue("@Password", person.Password);
         command.Parameters.AddWithValue("@Role", person.Role);
 
-        command.ExecuteNonQuery(); // execute the query, only returns # of rows effected
-        //to get the person back, user the sql line with OUTPUT.* + SQLDataReader in GetPerson
+        int rowsAffected = command.ExecuteNonQuery(); // execute the query
+        return rowsAffected > 0; // return true if the update was successful, false otherwise
     }
 
     public Person? GetPerson(int? personId)
     {
         string connectionString = "data source=GEIPW0785V4;initial catalog=Project_1;user id=sa;password=password"; // connection string to SQL Server
-        Person persons = new Person();  // empty list to add results to// empty list to add results to
+        List<Person> persons = new List<Person>();  // empty list to add results to// empty list to add results to
         int Id = personId ?? 0;
 
         // help from: https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/retrieving-data-using-a-datareader
@@ -61,7 +51,7 @@ public class PersonRepo //changed from PersonStorage to REPO
                     PersonId = SqlExtensions.GetInt32(reader, "PersonId") ?? 0,
                     LastName = SqlExtensions.GetString(reader, "LastName") ?? string.Empty,
                     FirstName = SqlExtensions.GetString(reader, "FirstName") ?? string.Empty,
-                    PhoneNumber = SqlExtensions.GetInt32(reader, "PhoneNumber") ?? 0,
+                    PhoneNumber = SqlExtensions.GetInt64(reader, "PhoneNumber") ?? 0,
                     Email = SqlExtensions.GetString(reader, "Email") ?? string.Empty,
                     Person_Type = SqlExtensions.GetString(reader, "Person_Type") ?? string.Empty,
                     Status = SqlExtensions.GetString(reader, "Status") ?? string.Empty,
@@ -73,7 +63,7 @@ public class PersonRepo //changed from PersonStorage to REPO
             }
         }
         reader.Close();
-        return persons;
+        return persons.FirstOrDefault(); // return the first person in the list
     }
 
     public bool UpdatePerson(Person personToUpdate)
@@ -102,7 +92,7 @@ public class PersonRepo //changed from PersonStorage to REPO
     public Person? GetUser(string? userId)
     {
         string connectionString = "data source=GEIPW0785V4;initial catalog=Project_1;user id=sa;password=password"; // connection string to SQL Server
-        Person user = new();  // empty list to add results to// empty list to add results to
+        List<Person> users = new List<Person>();  // empty list to add results to// empty list to add results to
         string Id = userId ?? "0";
 
         // help from: https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/retrieving-data-using-a-datareader
@@ -111,23 +101,117 @@ public class PersonRepo //changed from PersonStorage to REPO
         string query = $"SELECT * FROM dbo.Person WHERE UserId = {Id};"; // SQL query to get a person
         SqlCommand command = new(query, sqlConnection);
         SqlDataReader reader = command.ExecuteReader(); // execute the query; returns a data reader object
+        if (reader.HasRows)
+        {
+            while (reader.Read())
+            {
+                var user = new Person()
+                {
+                    PersonId = SqlExtensions.GetInt32(reader, "PersonId") ?? 0,
+                    LastName = SqlExtensions.GetString(reader, "LastName") ?? string.Empty,
+                    FirstName = SqlExtensions.GetString(reader, "FirstName") ?? string.Empty,
+                    PhoneNumber = SqlExtensions.GetInt64(reader, "PhoneNumber") ?? 0,
+                    Email = SqlExtensions.GetString(reader, "Email") ?? string.Empty,
+                    Person_Type = SqlExtensions.GetString(reader, "Person_Type") ?? string.Empty,
+                    Status = SqlExtensions.GetString(reader, "Status") ?? string.Empty,
+                    UserId = SqlExtensions.GetString(reader, "UserId") ?? string.Empty,
+                    Password = SqlExtensions.GetString(reader, "Password") ?? string.Empty,
+                    Role = SqlExtensions.GetString(reader, "Role") ?? string.Empty
+                };
+                users.Add(user); // Add getPerson to the person list
+            }
+        }
+        reader.Close();
+        return users.FirstOrDefault(); // return the first person in the list
+        // Remove the declaration of the 'person' variable since it is already declared in the code above
+        // var person = new List<Person>(); // Initialize person as a List<Person>
+        // if (reader.HasRows)
+        // {
+
+        //     command.Parameters.AddWithValue("@PersonId", user.PersonId);
+        //     command.Parameters.AddWithValue("@FirstName", user.FirstName);
+        //     command.Parameters.AddWithValue("@LastName", user.LastName);
+        //     command.Parameters.AddWithValue("@PhoneNumber", user.PhoneNumber);
+        //     command.Parameters.AddWithValue("@Email", user.Email);
+        //     command.Parameters.AddWithValue("@Person_Type", user.Person_Type);
+        //     command.Parameters.AddWithValue("@Status", user.Status);
+        //     command.Parameters.AddWithValue("@UserId", user.UserId);
+        //     command.Parameters.AddWithValue("@Password", user.Password);
+        //     command.Parameters.AddWithValue("@Role", user.Role);
+        // }
+        // reader.Close();
+        // return user;
+    }
+    public List<Person> GetAllCustomers()
+    {
+        string connectionString = "data source=GEIPW0785V4;initial catalog=Project_1;user id=sa;password=password"; // connection string to SQL Server
+        var persons = new List<Person>();  // empty list to add results to// empty list to add results to
+
+        // help from: https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/retrieving-data-using-a-datareader
+        using SqlConnection sqlConnection = new(connectionString); // using statement to ensure resources are released after query is done
+        sqlConnection.Open();
+        string query = $"SELECT * FROM dbo.Person WHERE Person_Type = 'Customer';"; // SQL query to get a person
+        SqlCommand command = new(query, sqlConnection);
+        SqlDataReader reader = command.ExecuteReader(); // execute the query; returns a data reader object
         // Remove the declaration of the 'person' variable since it is already declared in the code above
         // var person = new List<Person>(); // Initialize person as a List<Person>
         if (reader.HasRows)
         {
-
-            command.Parameters.AddWithValue("@PersonId", user.PersonId);
-            command.Parameters.AddWithValue("@FirstName", user.FirstName);
-            command.Parameters.AddWithValue("@LastName", user.LastName);
-            command.Parameters.AddWithValue("@PhoneNumber", user.PhoneNumber);
-            command.Parameters.AddWithValue("@Email", user.Email);
-            command.Parameters.AddWithValue("@Person_Type", user.Person_Type);
-            command.Parameters.AddWithValue("@Status", user.Status);
-            command.Parameters.AddWithValue("@UserId", user.UserId);
-            command.Parameters.AddWithValue("@Password", user.Password);
-            command.Parameters.AddWithValue("@Role", user.Role);
+            while (reader.Read())
+            {
+                var person = new Person()
+                {
+                    PersonId = SqlExtensions.GetInt32(reader, "PersonId") ?? 0,
+                    LastName = SqlExtensions.GetString(reader, "LastName") ?? string.Empty,
+                    FirstName = SqlExtensions.GetString(reader, "FirstName") ?? string.Empty,
+                    PhoneNumber = SqlExtensions.GetInt64(reader, "PhoneNumber") ?? 0,
+                    Email = SqlExtensions.GetString(reader, "Email") ?? string.Empty,
+                    Person_Type = SqlExtensions.GetString(reader, "Person_Type") ?? string.Empty,
+                    Status = SqlExtensions.GetString(reader, "Status") ?? string.Empty,
+                    UserId = SqlExtensions.GetString(reader, "UserId") ?? string.Empty,
+                    Password = SqlExtensions.GetString(reader, "Password") ?? string.Empty,
+                    Role = SqlExtensions.GetString(reader, "Role") ?? string.Empty
+                };
+                persons.Add(person); // Add getPerson to the person list
+            }
         }
         reader.Close();
-        return user;
+        return persons;
+    }
+    public List<Person> GetInterestedCustomers()
+    {
+        string connectionString = "data source=GEIPW0785V4;initial catalog=Project_1;user id=sa;password=password"; // connection string to SQL Server
+        var persons = new List<Person>();  // empty list to add results to// empty list to add results to
+
+        // help from: https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/retrieving-data-using-a-datareader
+        using SqlConnection sqlConnection = new(connectionString); // using statement to ensure resources are released after query is done
+        sqlConnection.Open();
+        string query = $"SELECT * FROM dbo.Person WHERE Person_Type = 'Customer' AND Status = 'I';"; // SQL query to get a person
+        SqlCommand command = new(query, sqlConnection);
+        SqlDataReader reader = command.ExecuteReader(); // execute the query; returns a data reader object
+        // Remove the declaration of the 'person' variable since it is already declared in the code above
+        // var person = new List<Person>(); // Initialize person as a List<Person>
+        if (reader.HasRows)
+        {
+            while (reader.Read())
+            {
+                var person = new Person()
+                {
+                    PersonId = SqlExtensions.GetInt32(reader, "PersonId") ?? 0,
+                    LastName = SqlExtensions.GetString(reader, "LastName") ?? string.Empty,
+                    FirstName = SqlExtensions.GetString(reader, "FirstName") ?? string.Empty,
+                    PhoneNumber = SqlExtensions.GetInt64(reader, "PhoneNumber") ?? 0,
+                    Email = SqlExtensions.GetString(reader, "Email") ?? string.Empty,
+                    Person_Type = SqlExtensions.GetString(reader, "Person_Type") ?? string.Empty,
+                    Status = SqlExtensions.GetString(reader, "Status") ?? string.Empty,
+                    UserId = SqlExtensions.GetString(reader, "UserId") ?? string.Empty,
+                    Password = SqlExtensions.GetString(reader, "Password") ?? string.Empty,
+                    Role = SqlExtensions.GetString(reader, "Role") ?? string.Empty
+                };
+                persons.Add(person); // Add getPerson to the person list
+            }
+        }
+        reader.Close();
+        return persons;
     }
 }
