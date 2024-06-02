@@ -1,39 +1,45 @@
-public class Lot  
+
+public class Lot
 {
     public int? LotId { get; set; }  // freeform but need to verify it is unique; required
     public string? Nickname { get; set; } // optional
-    public string? Address { get; set; } 
-    public string Neighborhood { get; set; }  // required
-    public decimal LotSizeAcres { get; set; } // required 
-    public Person? InterestedPerson_1 { get; set; } //link to Person
-    public Person? InterestedPerson_2 { get; set; } //link to Person
-    public bool IsAvailable { get; set; } // required
+    public string? Address { get; set; }
+    public string Neighborhood { get; set; } = ""; // required default empty string
+    public decimal LotSizeAcres { get; set; } = 0.0m; // required default to 0.0m
+    public bool IsAvailable { get; set; } = true; // required; default to true
+    public int? InterestedCustomer_1 { get; set; } = 0;//link to Person
+    public int? InterestedCustomer_2 { get; set; } = 0;//link to Person
+    public int? UnderContractToCustomerId { get; set; } = 0;//link to Person
+    public int? SoldToCustomerId { get; set; } = 0;//link to Person
+    public decimal? ListedPrice { get; set; } // required
+    public decimal? SalePrice { get; set; } // required
 
     public Lot()
     {
-        Neighborhood = "";
-        LotSizeAcres = 0.0m;
-        IsAvailable = true;
+        //Default constructor
     }
 
-
-    public Lot(int lotId, string? nickname, string? address, string neighborhood, decimal lotSizeAcres, Person? interestedPerson_1, Person? interestedPerson_2, bool isAvailable)
+    public Lot(int? lotId, string? nickname, string? address, string neighborhood, decimal lotSizeAcres, bool isAvailable, int? interestedCustomer_1, int? interestedCustomer_2, int? underContractToCustomerId, int? soldToCustomerId, decimal? listedPrice, decimal? salePrice)
     {
         LotId = lotId;
         Nickname = nickname;
         Address = address;
         Neighborhood = neighborhood;
         LotSizeAcres = lotSizeAcres;
-        InterestedPerson_1 = interestedPerson_1;
-        InterestedPerson_2 = interestedPerson_2;
         IsAvailable = isAvailable;
+        InterestedCustomer_1 = interestedCustomer_1;
+        InterestedCustomer_2 = interestedCustomer_2;
+        UnderContractToCustomerId = underContractToCustomerId;
+        SoldToCustomerId = soldToCustomerId;
+        ListedPrice = listedPrice;
+        SalePrice = salePrice;
     }
 
     public override string ToString()
     {
         return Newtonsoft.Json.JsonConvert.SerializeObject(this);
-    } 
-}    
+    }
+}
 
 /*
 - Lot Number - Unique Key
