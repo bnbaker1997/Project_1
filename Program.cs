@@ -8,15 +8,14 @@ public class Program
 {
     static LotService lotService = new();
     static PersonService personService = new();
-    static object? newCustomer;
 
     public static void Main(string[] args)
     {
-        // OpeningMenu();
-        // Console.ReadKey();
+        OpeningMenu();
+        Console.ReadKey();
         LoginMenu();
-        // Console.WriteLine("Press any key to exit the program");
-        // Console.ReadKey();
+        Console.WriteLine("Press any key to exit the program");
+        Console.ReadKey();
         MainMenu();
         // SalesMenu();
         CustomerMenu();
@@ -82,7 +81,7 @@ public class Program
     }
     public static void MainMenu()
     {
-       System.Console.WriteLine("********************************");
+        System.Console.WriteLine("********************************");
         System.Console.WriteLine(" ");
         Console.WriteLine("Main Menu");
         System.Console.WriteLine("_______________________________");
@@ -207,7 +206,7 @@ public class Program
         Console.WriteLine("0 - Exit");
         Console.WriteLine("_______________________________");
         Console.WriteLine("Enter an option number: ");
-        
+
         int input;
         while (!int.TryParse(Console.ReadLine(), out input) || input != 0)
         {
@@ -215,33 +214,7 @@ public class Program
             Console.WriteLine("Enter an option number: ");
         }
     }
-    public static void GetInterestedCustomer()
-    {
-        List<Person> interestedCustomers = personService.GetInterestedCustomers();
-        if (interestedCustomers.Count == 0)
-        {
-            Console.WriteLine("No interested customers were found.");
-            return;
-        }
-        foreach (Person customer in interestedCustomers)
-        {
-            System.Console.WriteLine(" ");
-            Console.WriteLine($"Customer ID: {customer.PersonId}");
-            Console.WriteLine($"First Name: {customer.FirstName}");
-            Console.WriteLine($"Last Name: {customer.LastName}");
-            Console.WriteLine($"Phone Number: {customer.PhoneNumber}");
-            Console.WriteLine($"Email: {customer.Email}");
-            Console.WriteLine($"Person Type: {customer.Person_Type}");
-            Console.WriteLine($"Status: {customer.Status}");
-            Console.WriteLine($"User ID: {customer.UserId}");
-            Console.WriteLine($"Role: {customer.Role}");
-            System.Console.WriteLine("_______________________________");
-        }
-        System.Console.WriteLine(" ");
-        System.Console.WriteLine("Press ENTER to return to the menu:");
-        Console.ReadKey();
-        CustomerMenu();
-    }
+
     public static void GetLot()
     {
         Lot? retrievedLot = PromptForLot();
@@ -315,13 +288,7 @@ public class Program
             Console.WriteLine($"Neighborhood: {lot.Neighborhood}");
             System.Console.WriteLine($"Address: {lot.Address}");
             Console.WriteLine($"Lot Size (acres): {lot.LotSizeAcres}");
-            // Console.WriteLine($"Is Available: {lot.IsAvailable}");
-            // Console.WriteLine($"Interested Customer 1: {lot.InterestedCustomer_1}");
-            // Console.WriteLine($"Interested Customer 2: {lot.InterestedCustomer_2}");
-            // Console.WriteLine($"Under Contract To Customer: {lot.UnderContractToCustomerId}");
-            // Console.WriteLine($"Sold To Customer: {lot.SoldToCustomerId}");
             Console.WriteLine($"List Price: {lot.ListedPrice}");
-            // Console.WriteLine($"Sale Price: {lot.SalePrice}");
             System.Console.WriteLine("_______________________________");
         }
     }
@@ -388,7 +355,6 @@ public class Program
         lotService.AddLot(lot);
     }
     public static void UpdateLot()
-    //TODO: Add in the Sales Record and related Person(s) to the input/output
     {
         Lot? retrievedLot = PromptForLot();
 
@@ -397,7 +363,6 @@ public class Program
             System.Console.WriteLine("Lot not found");
             return;
         }
-        // var updatedLot = lotService.UpdateLot(retrievedLot);
         if (retrievedLot != null)
         {
             System.Console.WriteLine("_______________________________");
@@ -462,8 +427,9 @@ public class Program
             //decimal? SalePrice = inputSalePrice == string.Empty ? retrievedLot.SalePrice : decimal.TryParse(inputSalePrice, out decimal salePrice) ? (decimal)salePrice : 0.0m;
             decimal SalePrice = inputSalePrice == string.Empty ? retrievedLot.SalePrice.GetValueOrDefault() : decimal.Parse(inputSalePrice);
 
-            retrievedLot.Address = address;
+            retrievedLot.Nickname = nickname;
             retrievedLot.Neighborhood = neighborhood;
+            retrievedLot.Address = address;
             retrievedLot.LotSizeAcres = lotSizeAcres;
             retrievedLot.IsAvailable = isAvailable;
             retrievedLot.InterestedCustomer_1 = interestedCustomer_1;
@@ -478,8 +444,6 @@ public class Program
         System.Console.WriteLine("_______________________________ ");
         System.Console.WriteLine("Lot updated successfully.");
         System.Console.WriteLine("_______________________________ ");
-        System.Console.WriteLine(" ");
-        System.Console.WriteLine("Main Menu:");
         MainMenu();
     }
 
@@ -607,34 +571,6 @@ public class Program
 
         return newPerson;
     }
-
-    // public static void AddPerson()    
-    // {
-
-    //     PersonService.AddPerson(newPerson);
-    //     Person newPerson = person;
-    //     if (newPerson != null)
-    //     {
-    //         Console.WriteLine("Person added successfully");
-    //         Console.WriteLine("_______________________________");
-    //         Console.WriteLine($"Person Id: {newPerson.PersonId}");
-    //         Console.WriteLine($"First Name: {newPerson.FirstName}");
-    //         Console.WriteLine($"Last Name: {newPerson.LastName}");
-    //         Console.WriteLine($"Phone Number: {newPerson.PhoneNumber}");
-    //         Console.WriteLine($"Email: {newPerson.Email}");
-    //         Console.WriteLine($"Person Type: {newPerson.Person_Type}");
-    //         Console.WriteLine($"User ID: {newPerson.UserId}");
-    //         Console.WriteLine($"Password: {newPerson.Password}");
-    //         Console.WriteLine($"Role: {newPerson.Role}");
-    //         Console.WriteLine($"Status: {newPerson.Status}");
-    //     }
-    //     else
-    //     {
-    //         Console.WriteLine("Failed to add customer");
-    //         return;
-    //     }
-    // }
-
     public static void AddCustomer()
     {
         Person newPerson = BasePerson();
@@ -670,17 +606,20 @@ public class Program
             //     }
             //     newPerson.LotId = lot;
             // }
-        newPerson.Person_Type = "Customer";
-        newPerson.Status = status;
-        newPerson.UserId = "n/a";
-        newPerson.Password = "n/a";
-        newPerson.Role = "n/a";
+            newPerson.Person_Type = "Customer";
+            newPerson.Status = status;
+            newPerson.UserId = " ";
+            newPerson.Password = " ";
+            newPerson.Role = " ";
         }
         PersonService.AddPerson(newPerson);
         if (newPerson != null)
         {
             Console.WriteLine("Customer added successfully");
             Console.WriteLine(newPerson.ToString());
+            System.Console.WriteLine("Press ENTER to return to the menu:");
+            Console.ReadKey();
+            CustomerMenu();
         }
         else
         {
@@ -697,7 +636,7 @@ public class Program
             return;
         }
         if (newPerson != null)
-        { 
+        {
             Console.WriteLine("Enter Employee Role: (Admin, User)");
             string role = Console.ReadLine();
             Console.WriteLine("Enter Employee Status: (Active, Inactive)");
@@ -715,6 +654,9 @@ public class Program
         {
             Console.WriteLine("Employee added successfully");
             Console.WriteLine(newPerson.ToString());
+            System.Console.WriteLine("Press ENTER to return to the menu:");
+            Console.ReadKey();
+            CustomerMenu();
         }
         else
         {
@@ -722,6 +664,57 @@ public class Program
             return;
         }
     }
+    public static void GetAllCustomers()
+    {
+        List<Person> customers = personService.GetAllCustomers();
+        if (customers.Count == 0)
+        {
+            Console.WriteLine("No customers were found.");
+            return;
+        }
+        foreach (Person customer in customers)
+        {
+            System.Console.WriteLine(" ");
+            Console.WriteLine($"Customer ID: {customer.PersonId}");
+            Console.WriteLine($"First Name: {customer.FirstName}");
+            Console.WriteLine($"Last Name: {customer.LastName}");
+            Console.WriteLine($"Phone Number: {customer.PhoneNumber}");
+            Console.WriteLine($"Email: {customer.Email}");
+            Console.WriteLine($"Person Type: {customer.Person_Type}");
+            Console.WriteLine($"Status: {customer.Status}");
+            System.Console.WriteLine("_______________________________");
+        }
+        System.Console.WriteLine(" ");
+        System.Console.WriteLine("Press ENTER to return to the menu:");
+        Console.ReadKey();
+        CustomerMenu();
+    }
+    public static void GetInterestedCustomer()
+    {
+        List<Person> interestedCustomers = personService.GetInterestedCustomers();
+        if (interestedCustomers.Count == 0)
+        {
+            Console.WriteLine("No interested customers were found.");
+            return;
+        }
+        foreach (Person customer in interestedCustomers)
+        {
+            System.Console.WriteLine(" ");
+            Console.WriteLine($"Customer ID: {customer.PersonId}");
+            Console.WriteLine($"First Name: {customer.FirstName}");
+            Console.WriteLine($"Last Name: {customer.LastName}");
+            Console.WriteLine($"Phone Number: {customer.PhoneNumber}");
+            Console.WriteLine($"Email: {customer.Email}");
+            Console.WriteLine($"Person Type: {customer.Person_Type}");
+            Console.WriteLine($"Status: {customer.Status}");
+            System.Console.WriteLine("_______________________________");
+        }
+        System.Console.WriteLine(" ");
+        System.Console.WriteLine("Press ENTER to return to the menu:");
+        Console.ReadKey();
+        CustomerMenu();
+    }
+
     public static void UpdatePerson()
     {
         Console.WriteLine("Enter Customer ID or 0 to exit:");
@@ -868,32 +861,6 @@ public class Program
     public static void GetSoldSales()
     {
         //TODO: Implement GetSoldSales
-    }
-    public static void GetAllCustomers() 
-    {
-        List<Person> customers = personService.GetAllCustomers();
-        if (customers.Count == 0)
-        {
-            Console.WriteLine("No customers were found.");
-            return;
-        }
-        foreach (Person customer in customers)
-        {
-            System.Console.WriteLine(" ");
-            Console.WriteLine($"Customer ID: {customer.PersonId}");
-            Console.WriteLine($"First Name: {customer.FirstName}");
-            Console.WriteLine($"Last Name: {customer.LastName}");
-            Console.WriteLine($"Phone Number: {customer.PhoneNumber}");
-            Console.WriteLine($"Email: {customer.Email}");
-            Console.WriteLine($"Person Type: {customer.Person_Type}");
-            Console.WriteLine($"Status: {customer.Status}");
-            Console.WriteLine($"User ID: {customer.UserId}");
-            Console.WriteLine($"Role: {customer.Role}");
-            System.Console.WriteLine("_______________________________");
-        }
-        System.Console.WriteLine(" ");
-        System.Console.WriteLine("Please make your next selection:");
-        CustomerMenu();
     }
     public static void GetAdmin() //TODO: Implement GetAdmin
     {

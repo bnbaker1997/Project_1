@@ -171,7 +171,7 @@ public class LotRepo  //changed from LotStorage to LotRepo
         using SqlConnection sqlConnection = new(connectionString); // using statement to ensure resources are released after query is done
         sqlConnection.Open();
         // string query = $"UPDATE dbo.Lot SET (Nickname, Address, Neighborhood, LotSize_Acres, IsAvailable) VALUES (@Nickname, @Address, @Neighborhood, @LotSize_Acres, @IsAvailable) WHERE LotId = {Id};"; // SQL query to update a lot
-        string query = $"UPDATE dbo.Lot SET Nickname = @Nickname, Address = @Address, Neighborhood = @Neighborhood, LotSize_Acres = @LotSize_Acres, IsAvailable = @IsAvailable, ListedPrice = @ListedPrice, SalePrice = @SalePrice, InterestedCustomer_1 = @InterestedCustomer_1, InterestedCustomer_2 = @InterestedCustomer_2, UnderContractToCustomerId = @UnderContractToCustomerId, SoldToCustomerId = @SoldToCustomerId  WHERE LotId = @LotId;";
+        string query = $"UPDATE dbo.Lot SET Nickname = @Nickname, Address = @Address, Neighborhood = @Neighborhood, LotSize_Acres = @LotSize_Acres, IsAvailable = @IsAvailable, InterestedCustomer_1 = @InterestedCustomer_1, InterestedCustomer_2 = @InterestedCustomer_2, UnderContractToCustomerId = @UnderContractToCustomerId, SoldToCustomerId = @SoldToCustomerId, ListedPrice = @ListedPrice, SalePrice = @SalePrice  WHERE LotId = @LotId;";
         SqlCommand command = new(query, sqlConnection);
 
         command.Parameters.AddWithValue("@LotId", lot.LotId);
@@ -180,12 +180,12 @@ public class LotRepo  //changed from LotStorage to LotRepo
         command.Parameters.AddWithValue("@Neighborhood", lot.Neighborhood);
         command.Parameters.AddWithValue("@LotSize_Acres", lot.LotSizeAcres);
         command.Parameters.AddWithValue("@IsAvailable", lot.IsAvailable);
-        command.Parameters.AddWithValue("@ListedPrice", lot.ListedPrice);
-        command.Parameters.AddWithValue("@SalePrice", lot.SalePrice);
         command.Parameters.AddWithValue("@InterestedCustomer_1", lot.InterestedCustomer_1);
         command.Parameters.AddWithValue("@InterestedCustomer_2", lot.InterestedCustomer_2);
         command.Parameters.AddWithValue("@UnderContractToCustomerId", lot.UnderContractToCustomerId);
         command.Parameters.AddWithValue("@SoldToCustomerId", lot.SoldToCustomerId);
+        command.Parameters.AddWithValue("@ListedPrice", lot.ListedPrice);
+        command.Parameters.AddWithValue("@SalePrice", lot.SalePrice);
         // command.ExecuteNonQuery(); // execute the query
         int rowsReturned = command.ExecuteNonQuery();
 
