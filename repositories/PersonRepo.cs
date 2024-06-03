@@ -32,8 +32,6 @@ public class PersonRepo //changed from PersonStorage to REPO
         string connectionString = "data source=GEIPW0785V4;initial catalog=Project_1;user id=sa;password=password"; // connection string to SQL Server
         List<Person> persons = new List<Person>();  // empty list to add results to// empty list to add results to
         int Id = personId ?? 0;
-
-        // help from: https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/retrieving-data-using-a-datareader
         using SqlConnection sqlConnection = new(connectionString); // using statement to ensure resources are released after query is done
         sqlConnection.Open();
         string query = $"SELECT * FROM dbo.Person WHERE PersonId = {Id};"; // SQL query to get a person
@@ -89,13 +87,11 @@ public class PersonRepo //changed from PersonStorage to REPO
         return rowsAffected > 0; // return true if the update was successful, false otherwise
     }
 
-    public Person? GetUser(string? userId)
+    public Person? GetUser(string userId)
     {
         string connectionString = "data source=GEIPW0785V4;initial catalog=Project_1;user id=sa;password=password"; // connection string to SQL Server
         List<Person> users = new List<Person>();  // empty list to add results to// empty list to add results to
-        string Id = userId ?? "0";
-
-        // help from: https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/retrieving-data-using-a-datareader
+        string Id = userId;
         using SqlConnection sqlConnection = new(connectionString); // using statement to ensure resources are released after query is done
         sqlConnection.Open();
         string query = $"SELECT * FROM dbo.Person WHERE UserId = {Id};"; // SQL query to get a person
@@ -123,24 +119,6 @@ public class PersonRepo //changed from PersonStorage to REPO
         }
         reader.Close();
         return users.FirstOrDefault(); // return the first person in the list
-        // Remove the declaration of the 'person' variable since it is already declared in the code above
-        // var person = new List<Person>(); // Initialize person as a List<Person>
-        // if (reader.HasRows)
-        // {
-
-        //     command.Parameters.AddWithValue("@PersonId", user.PersonId);
-        //     command.Parameters.AddWithValue("@FirstName", user.FirstName);
-        //     command.Parameters.AddWithValue("@LastName", user.LastName);
-        //     command.Parameters.AddWithValue("@PhoneNumber", user.PhoneNumber);
-        //     command.Parameters.AddWithValue("@Email", user.Email);
-        //     command.Parameters.AddWithValue("@Person_Type", user.Person_Type);
-        //     command.Parameters.AddWithValue("@Status", user.Status);
-        //     command.Parameters.AddWithValue("@UserId", user.UserId);
-        //     command.Parameters.AddWithValue("@Password", user.Password);
-        //     command.Parameters.AddWithValue("@Role", user.Role);
-        // }
-        // reader.Close();
-        // return user;
     }
     public List<Person> GetAllCustomers()
     {
